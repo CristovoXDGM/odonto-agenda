@@ -6,7 +6,13 @@
   width: 100%;
 }
 
-.schedule {
-  width: 60%;
+.schedules {
+  width: 100%;
   margin-top: 1em;
+}
+
+.schedules__date {
+  text-decoration-line: underline;
+  margin-bottom: 0.5em;
+  margin-left: 4.5em;
 }

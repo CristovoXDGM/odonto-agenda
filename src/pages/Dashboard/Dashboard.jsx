@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Calendar from 'react-calendar';
+import { format } from 'date-fns';
+import { baseUrl } from '../../services/api';
 
 import 'react-calendar/dist/Calendar.css';
 import './styles.css';
@@ -9,62 +11,36 @@ import Hour from '../Hour';
 const Dashboard = () => {
   const [date, setDate] = useState(new Date());
   const [appointments, setAppointments] = useState([]);
-
-  const hours = () => {
-    const hours = [];
-
-    for (let hour = 0; hour <= 23; hour++) {
-      hours.push(hour);
-      hours.push(`${hour}:30`);
-    }
-
-    return hours;
-  }
-
-  const formatDate = date => {
-    let day = `${date.getDate()}`;
-    let month = `${date.getMonth() + 1}`;
-    const year = date.getFullYear();
-
-    const formattedDate = `
-      ${year}-${month.length === 1 ? '0' + month : month}-${day.length === 1 ? '0' + day : day}
-    `;
-
-    return formattedDate;
-  }
+  const choosenDay = format(date, 'yyyy-MM-dd');
 
   useEffect(() => {
-    fetch('http://localhost:3333/appointments')
+    fetch(`${baseUrl}/appointments?schedule=${choosenDay}`)
       .then(res => res.json())
       .then(data => {
-        const appointmentsOfDay = data.map(appointment => {
-          const appointmentDate = new Date(appointment.date);
-
-          if (formatDate(appointmentDate) === formatDate(date)) {
-            return {
-              client: appointment.name,
-              hour: `${appointmentDate.getHours()}:${appointmentDate.getMinutes()}`,
-            };
-          }
-          
-        });
-        setAppointments(appointmentsOfDay);
+        setAppointments(data);
       });
   }, [date]);
-  console.log(appointments)
+
+  const handleChangeDate = event => {
+    setDate(event);
+  }
 
   return (
     <div className="dashboard">
       <section className="calendar">
         <Calendar 
           value={date}
-          onChange={event => {setDate(event)}}
+          onChange={event => {handleChangeDate(event)}}
         />
       </section>
 
-      <section className="schedule">
-        {hours().map((hour, index) => (
-          <Hour key={`${hour}-${index}`} hour={hour} appointments={appointments}/>
+      <section className="schedules">
+        {choosenDay === format(new Date(), 'yyyy-MM-dd')
+          ? <h2 className="schedules__date">Hoje</h2>
+          : <h2 className="schedules__date">{format(date, 'dd/MM')}</h2>
+        }
+        {appointments.map(appointment => (
+          <Hour key={appointment.id} appointment={appointment}/>
         ))}
       </section>
     </div>

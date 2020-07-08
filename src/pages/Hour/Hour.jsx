@@ -1,26 +1,25 @@
 import React from 'react';
+import { addMinutes, format, parseISO } from 'date-fns';
 
 import './styles.css';
 
-const Hour = ({ hour, appointments }) => {
-  let hourAppointment = '';
-  appointments.map(appointment => {
-    if (appointment !== undefined && appointment.hour === hour) {
-      hourAppointment = `Marcado para o paciente ${appointment.client}`
-    }
-  })
+const Hour = ({ appointment }) => {
+  const limit = addMinutes(parseISO(appointment.date), appointment.duration)
 
   return (
-    <div>
-      {hourAppointment
-      ? <div className="hour">
-          {hour}
-          <p>{hourAppointment}</p>
+    <div className="schedule-wrapper">
+      {appointment && 
+      <div className="schedule">
+        <div className="schedule__info-top">
+          <h3 className="schedule__procedure">{appointment.procedure}</h3>
+          <p className="schedule__hour">{appointment.appointmentSchedule}</p>
+        </div>
+        <div className="schedule__info-bottom">
+          <p>{appointment.client}</p>
+          <p>--{format(limit, 'HH:mm')}</p>
+        </div>
       </div>
-      : <input 
-        type="text"
-        className="hour__input"
-      />}
+      }
     </div>
   );
 }
