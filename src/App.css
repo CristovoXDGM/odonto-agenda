@@ -1,3 +1,16 @@
+:root {
+  --bg-color: #F1F1F1;
+  --bg-darker: #E7E7E7;
+  --text-gray: #6B6B6B;
+
+  --consultation-color: #000080;
+  --consultation-bg: #E5E5F2;
+  --cleaning-color: #FFA500;
+  --cleaning-bg: #FFF6E5;
+  --extraction-color: #CE0000;
+  --extraction-bg: #FAE5E5;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -8,6 +21,7 @@
 body {
   width: auto;
   height: 100vh;
+  background-color: var(--bg-color );
 
   font-family: 'Roboto', sans-serif;
 }

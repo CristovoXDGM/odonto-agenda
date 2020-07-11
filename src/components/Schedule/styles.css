@@ -1,16 +1,15 @@
 .schedule-wrapper {
   width: 100%;
-  background-color: rgba(146, 146, 146, 0.1);
-  margin: 0.5em 0;
+  background-color: var(--bg-darker);
+  margin: 1em 0;
 }
 
 .schedule {
   display: flex;
   flex-direction: column;
 
-  border-left: 4px solid #001AFF;
-  padding: 0.2em 2.8em;
-  width: 75%;
+  padding: 0.2em 2em;
+  width: 90%;
   margin: auto;
 }
 
@@ -22,7 +21,6 @@
 
 .schedule__procedure {
   font-size: 1.2em;
-  color: #001AFF;
 }
 
 .schedule__hour {
@@ -33,11 +31,23 @@
 .schedule__info-bottom {
   margin-top: 0.7em;
 
-  color: #6b6b6b;
+  color: var(--text-gray);
   font-size: 0.9em;
 }
 
 .schedule__field {
   padding: 0.1em;
   margin-left: 15%;
+}
+
+@media (min-width: 768px) {
+  .schedule {
+    width: 85%;
+  }
+}
+
+@media (min-width: 1000px) {
+  .schedule-wrapper {
+    font-size: 18px;
+  }
 }

@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import Calendar from 'react-calendar';
 import { format } from 'date-fns';
+import { ptBR } from 'date-fns/locale';
 import { baseUrl } from '../../services/api';
 
 import 'react-calendar/dist/Calendar.css';
 import './styles.css';
 
-import Hour from '../Hour';
+import Schedule from '../../components/Schedule';
 
 const Dashboard = () => {
   const [date, setDate] = useState(new Date());
@@ -19,7 +20,7 @@ const Dashboard = () => {
       .then(data => {
         setAppointments(data);
       });
-  }, [date]);
+  }, [choosenDay]);
 
   const handleChangeDate = event => {
     setDate(event);
@@ -34,15 +35,29 @@ const Dashboard = () => {
         />
       </section>
 
-      <section className="schedules">
+      <div className="schedules-container">
+
+        {/* MOBILE DATE */}
         {choosenDay === format(new Date(), 'yyyy-MM-dd')
           ? <h2 className="schedules__date">Hoje</h2>
-          : <h2 className="schedules__date">{format(date, 'dd/MM')}</h2>
+          : <h2 className="schedules__date">{format(date, "dd/MM")}</h2>
         }
-        {appointments.map(appointment => (
-          <Hour key={appointment.id} appointment={appointment}/>
-        ))}
-      </section>
+
+        {/* DESKTOP DATE */}
+        <h2 className="schedules__date schedules__date--desktop">
+          {format(date, "dd 'de' MMMM 'de' yyyy", { locale: ptBR })}
+        </h2>
+        
+        <section className="schedules">
+          {appointments.length
+            ? appointments.map(appointment => (
+                <Schedule key={appointment.id} appointment={appointment}/>
+            ))
+            : <p className="schedules__empty">Não há nada agendado nesta data :)</p>
+          }
+        </section>
+        
+      </div>
     </div>
   );
 }
