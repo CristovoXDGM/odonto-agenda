@@ -8,6 +8,7 @@ import 'react-calendar/dist/Calendar.css';
 import './styles.css';
 
 import Schedule from '../../components/Schedule';
+import Button from '../../components/Button';
 
 const Dashboard = () => {
   const [date, setDate] = useState(new Date());
@@ -35,25 +36,31 @@ const Dashboard = () => {
         />
       </section>
 
-      <div className="schedules-container">
+      <div className="schedules">
 
-        {/* MOBILE DATE */}
-        {choosenDay === format(new Date(), 'yyyy-MM-dd')
-          ? <h2 className="schedules__date">Hoje</h2>
-          : <h2 className="schedules__date">{format(date, "dd/MM")}</h2>
-        }
+        <div className="schedules__header">
+          {/* MOBILE DATE */}
+          {choosenDay === format(new Date(), 'yyyy-MM-dd')
+            ? <h2 className="schedules__header__date">Hoje</h2>
+            : <h2 className="schedules__header__date">{format(date, "dd/MM")}</h2>
+          }
 
-        {/* DESKTOP DATE */}
-        <h2 className="schedules__date schedules__date--desktop">
-          {format(date, "dd 'de' MMMM 'de' yyyy", { locale: ptBR })}
-        </h2>
-        
-        <section className="schedules">
+          {/* DESKTOP DATE */}
+          <h2 className="schedules__header__date schedules__header__date--desktop">
+            {format(date, "dd 'de' MMMM 'de' yyyy", { locale: ptBR })}
+          </h2>
+          
+          <div className="add-appointment">
+            <Button text={'Agendar'} icon={'add'}/>
+          </div>
+        </div>
+
+        <section className="schedules__content">
           {appointments.length
             ? appointments.map(appointment => (
                 <Schedule key={appointment.id} appointment={appointment}/>
             ))
-            : <p className="schedules__empty">Não há nada agendado nesta data :)</p>
+            : <p className="schedules__content__empty">Não há nada agendado nesta data :)</p>
           }
         </section>
         
