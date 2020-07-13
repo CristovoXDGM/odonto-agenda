@@ -1,0 +1,102 @@
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+
+  width: 100%;
+  height: 100vh;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal {
+  background-color: #fff;
+  width: 80%;
+  height: 70vh;
+  padding: 30px;
+
+  border-radius: 36px;
+}
+
+/* HEADER */
+.modal__title {
+  font-size: 1em;
+  font-weight: normal;
+}
+
+.modal__date {
+  font-size: 1.3em;
+  margin-top: 0.3em;
+}
+
+/* CONTENT */
+.modal__content {
+  display: flex;
+  flex-direction: column;
+  margin-top: 0.8em;
+}
+
+.modal__field {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 0.6em;
+  width: 100%;
+}
+
+.modal__field--hour {
+  width: 35%;
+}
+
+.modal__field--duration {
+  width: 30%;
+}
+
+.modal__time {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.input__units,
+.modal__label {
+  font-size: 0.8em;
+  color: var(--text-gray);
+}
+
+.field__input {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+}
+
+.input__units {
+  margin-left: 0.3em;
+}
+
+.modal__input {
+  width: 100%;
+  margin-top: 0.2em;
+  padding: 0.2em 0.4em;
+
+  font-size: 1em;
+}
+
+.modal__input--comments {
+  height: 7em;
+}
+
+/* FOOTER */
+.modal__footer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-top: 0.7em;
+}
+
+.button__cancel {
+  background-color: var(--cancel-button);
+}

@@ -3,6 +3,7 @@
   --bg-darker: #E7E7E7;
   --text-gray: #6B6B6B;
   --button-color: #006edc;
+  --cancel-button: #585858;
 
   --consultation-color: #000080;
   --consultation-bg: #E5E5F2;
@@ -23,6 +24,8 @@ body {
   width: auto;
   height: 100vh;
   background-color: var(--bg-color );
+}
 
+body, input, button {
   font-family: 'Roboto', sans-serif;
 }

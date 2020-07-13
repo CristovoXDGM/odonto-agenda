@@ -9,8 +9,10 @@ import './styles.css';
 
 import Schedule from '../../components/Schedule';
 import Button from '../../components/Button';
+import AppointmentModal from '../../components/AppointmentModal';
 
 const Dashboard = () => {
+  const [activeModal, setActiveModal] = useState(false);
   const [date, setDate] = useState(new Date());
   const [appointments, setAppointments] = useState([]);
   const choosenDay = format(date, 'yyyy-MM-dd');
@@ -25,6 +27,10 @@ const Dashboard = () => {
 
   const handleChangeDate = event => {
     setDate(event);
+  }
+
+  const handleClickNew = () => {
+    setActiveModal(true);
   }
 
   return (
@@ -50,8 +56,11 @@ const Dashboard = () => {
             {format(date, "dd 'de' MMMM 'de' yyyy", { locale: ptBR })}
           </h2>
           
-          <div className="add-appointment">
-            <Button text={'Agendar'} icon={'add'}/>
+          <div 
+            className="add-appointment" 
+            onClick={handleClickNew}
+          >
+            <Button text={'Novo'} icon={'add'} />
           </div>
         </div>
 
@@ -64,6 +73,9 @@ const Dashboard = () => {
           }
         </section>
         
+        {activeModal &&
+          <AppointmentModal action={'new'} day={date}/>
+        }
       </div>
     </div>
   );

@@ -22,8 +22,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0.5em 0;
-  width: calc(100% - 4em);
+  padding: 1em 0;
+  width: min(90%, 32em);
   margin: auto;
 }
 
@@ -60,10 +60,10 @@
     padding: 0 1.5em;
   }
 
-  /* .schedules__header {
-    padding-left: 3.7em;
-    padding-right: 3.7em;
-  } */
+  .schedules__header {
+    padding-left: 1em;
+    padding-right: 1em;
+  }
 }
 
 @media (min-width: 1000px) {
@@ -76,13 +76,19 @@
 
   .schedules {
     height: 75vh;
+    margin-left: 2em;
   }
 
-  .schedules__date {
+  .schedules__header {
+    padding: 0 0 1em;
+    width: 100%;
+  }
+
+  .schedules__header__date {
     display: none;
   }
 
-  .schedules__date--desktop {
+  .schedules__header__date--desktop {
     display: inline-block;
     text-decoration: none;
     padding-top: 0;

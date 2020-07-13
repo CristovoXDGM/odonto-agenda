@@ -7,7 +7,7 @@ function Button({ text, icon }) {
     <button className="button">
       {text}
       {icon &&
-        <span className="material-icons">{icon}</span>
+        <span className="material-icons button__icon">{icon}</span>
       }
     </button>
   );
