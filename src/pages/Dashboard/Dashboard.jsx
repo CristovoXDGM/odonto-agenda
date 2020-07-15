@@ -7,7 +7,7 @@ import { baseUrl } from '../../services/api';
 import 'react-calendar/dist/Calendar.css';
 import './styles.css';
 
-import Schedule from '../../components/Schedule';
+import ScheduleList from '../../components/ScheduleList';
 import Button from '../../components/Button';
 import AppointmentModal from '../../components/AppointmentModal';
 
@@ -23,14 +23,22 @@ const Dashboard = () => {
       .then(data => {
         setAppointments(data);
       });
-  }, [choosenDay]);
+  }, [choosenDay, activeModal]);
 
   const handleChangeDate = event => {
     setDate(event);
   }
 
-  const handleClickNew = () => {
+  const handleClickNew = e => {
+    e.preventDefault();
+
     setActiveModal(true);
+  }
+
+  const handleClickCancel = e => {
+    e.preventDefault();
+
+    setActiveModal(false);
   }
 
   return (
@@ -56,25 +64,21 @@ const Dashboard = () => {
             {format(date, "dd 'de' MMMM 'de' yyyy", { locale: ptBR })}
           </h2>
           
-          <div 
-            className="add-appointment" 
-            onClick={handleClickNew}
-          >
-            <Button text={'Novo'} icon={'add'} />
+          <div className="add-appointment">
+            <Button text={'Novo'} icon={'add'} handleClick={handleClickNew} />
           </div>
         </div>
 
-        <section className="schedules__content">
-          {appointments.length
-            ? appointments.map(appointment => (
-                <Schedule key={appointment.id} appointment={appointment}/>
-            ))
-            : <p className="schedules__content__empty">Não há nada agendado nesta data :)</p>
-          }
-        </section>
+        <ScheduleList appointments={appointments}/>
         
         {activeModal &&
-          <AppointmentModal action={'new'} day={date}/>
+          <AppointmentModal 
+            setModal={setActiveModal}
+            action={'new'} 
+            choosenDate={choosenDay} 
+            date={date} 
+            handleCancel={handleClickCancel} 
+          />
         }
       </div>
     </div>

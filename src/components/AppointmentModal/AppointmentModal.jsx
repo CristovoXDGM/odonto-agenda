@@ -7,12 +7,18 @@ import './styles.css';
 
 import Button from '../Button';
 
-function AppointmentModal({ action, day, appointmentId }) {
+function AppointmentModal({ setModal, action, choosenDate, date, appointmentId, handleCancel }) {
   const [status] = useState(action);
   const [procedures, setProcedures] = useState([]);
   const [clients, setClients] = useState([]);
-  const [appointment, setAppointment] = useState({});
 
+  const [appointment, setAppointment] = useState({})
+  const [procedureId, setProcedureId] = useState(appointment.procedure_id || 1);
+  const [clientId, setClientId] = useState(appointment.client_id || 1);
+  const [hour, setHour] = useState(appointment.hour || '');
+  const [duration, setDuration] = useState(appointment.duration || '');
+  const [comments, setComments] = useState(appointment.comments);
+  
   useEffect(() => {
     fetch(`${baseUrl}/procedures`)
       .then(res => res.json())
@@ -31,20 +37,49 @@ function AppointmentModal({ action, day, appointmentId }) {
         .then(res => res.json())
         .then(data => setAppointment(data));
     }
-  }, []);
+  }, [appointmentId]);
 
   const hourMask = input => {
-    setTimeout(function() {
-      let value = input.target.value;
-      value = value.replace(/\D/g, "");
+    let value = input.target.value;
 
-      return value;         // FAZER MASCARA DA HORA
-    }, 1)
+    setHour(value
+      .replace(/\D/g, '')
+      .replace(/(\d{2})/, '$1:')
+    )
+  }
+
+  const handleSubmit = async e => {
+    e.preventDefault();
+
+    const postObject = JSON.stringify({
+      procedure_id: Number(procedureId),
+      client_id: Number(clientId),
+      choosenDate,
+      hour,
+      duration,
+      comments
+    });
+
+    try {
+      await fetch(`${baseUrl}/appointments`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: postObject,
+      });
+
+      setModal(false);
+
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   return (
     <div className="modal-overlay">
-      <form className="modal">
+      <div className="modal">
+
         <header className="modal__header">
           <h1 className="modal__title">
             {status === 'new'
@@ -53,10 +88,7 @@ function AppointmentModal({ action, day, appointmentId }) {
             }
           </h1>
           <h2 className="modal__date">
-            {status === 'new'
-              ? format(day, "dd 'de' MMMM 'de' yyyy", { locale: ptBR })
-              : ''
-            }
+            {format(date, "dd 'de' MMMM 'de' yyyy", { locale: ptBR })}
           </h2>
         </header>
 
@@ -64,7 +96,7 @@ function AppointmentModal({ action, day, appointmentId }) {
 
           <div className="modal__field">
             <label className="modal__label">Procedimento</label>
-            <select name="procedure_id" className="modal__input">
+            <select name="procedure_id" className="modal__input" value={procedureId} onChange={e => setProcedureId(e.target.value)}>
               {procedures.map(procedure => (
                 <option key={procedure.id} value={procedure.id}>
                   {procedure.name}
@@ -75,7 +107,7 @@ function AppointmentModal({ action, day, appointmentId }) {
 
           <div className="modal__field">
             <label className="modal__label">Paciente</label>
-            <select name="client_id" className="modal__input">
+            <select name="client_id" className="modal__input" value={clientId} onChange={e => setClientId(e.target.value)}>
               {clients.map(client => (
                 <option key={client.id} value={client.id}>
                   {client.name}
@@ -92,8 +124,9 @@ function AppointmentModal({ action, day, appointmentId }) {
                 <input
                   type="text"
                   name="hour"
-                  value={appointment.hour}
-                  onKeyDown={e => hourMask(e)}
+                  maxLength="5"
+                  value={hour}
+                  onChange={e => hourMask(e)}
                   className="modal__input"
                 />
                 <span className="input__units">hs</span>
@@ -104,9 +137,11 @@ function AppointmentModal({ action, day, appointmentId }) {
               <label className="modal__label">Duração</label>
               <div className="field__input">
                 <input
-                  type="number"
+                  type="text"
                   name="duration"
-                  value={appointment.duration}
+                  maxLength="3"
+                  value={duration}
+                  onChange={e => setDuration(e.target.value)}
                   className="modal__input"
                 />
                 <span className="input__units">min</span>
@@ -117,21 +152,27 @@ function AppointmentModal({ action, day, appointmentId }) {
 
           <div className="modal__field">  
             <label className="modal__label">Comentários</label>
-            <textarea name="comments" className="modal__input modal__input--comments">
-              {appointment.comments}
-            </textarea>
+            <textarea 
+              name="comments" 
+              className="modal__input modal__input--comments"
+              value={comments}
+              onChange={e => setComments(e.target.value)}
+            />
           </div>
+
+          <input type="hidden" name="choosenDate" value={choosenDate}/>
 
         </main>
 
         <footer className="modal__footer">
           {status === 'new'
-            ? <Button text={'Agendar'}/>
+            ? <Button text={'Agendar'}  handleClick={handleSubmit}/>
             : <Button text={'Salvar'}/>
           }
-          <Button text={'Cancelar'} className="button__cancel"/>
+          <Button text={'Cancelar'} className="button__cancel" handleClick={handleCancel}/>
         </footer>
-      </form>
+        
+      </div>
     </div>
   );
 }
