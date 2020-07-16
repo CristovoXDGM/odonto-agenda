@@ -14,8 +14,7 @@
 
 .modal {
   background-color: #fff;
-  width: 80%;
-  height: 70vh;
+  width: min(80%, 500px);  /*385px*/
   padding: 30px;
 
   border-radius: 36px;
@@ -47,18 +46,19 @@
 }
 
 .modal__field--hour {
-  width: 35%;
+  width: 5em;
 }
 
 .modal__field--duration {
-  width: 30%;
+  width: 4.5em;
+  margin-left: 50px;
 }
 
 .modal__time {
   width: 100%;
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  /* justify-content: space-around; */
 }
 
 .input__units,

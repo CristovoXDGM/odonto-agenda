@@ -3,12 +3,10 @@
   justify-content: center;
   align-items: center;
 
-  background-color: var(--button-color);
   border: none;
   border-radius: 2px;
   box-shadow: 2px 2px 6px -4px rgba(0, 0, 0, 0.9);
 
-  color: #fff;
   font-size: 0.95em;
 
   padding: 0.5em 1em;

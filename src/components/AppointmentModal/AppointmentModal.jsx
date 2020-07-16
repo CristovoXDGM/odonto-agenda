@@ -1,24 +1,28 @@
 import React, { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { baseUrl } from '../../services/api';
+import { resetAppointment } from '../../actions/appointment';
 
 import './styles.css';
 
 import Button from '../Button';
 
-function AppointmentModal({ setModal, action, choosenDate, date, appointmentId, handleCancel }) {
-  const [status] = useState(action);
+function AppointmentModal({ setModal, action, choosenDate, date, handleCancel }) {
+  const dispatch = useDispatch();
+  const appointment = useSelector(state => state.appointment);
+
   const [procedures, setProcedures] = useState([]);
   const [clients, setClients] = useState([]);
 
-  const [appointment, setAppointment] = useState({})
   const [procedureId, setProcedureId] = useState(appointment.procedure_id || 1);
   const [clientId, setClientId] = useState(appointment.client_id || 1);
   const [hour, setHour] = useState(appointment.hour || '');
   const [duration, setDuration] = useState(appointment.duration || '');
-  const [comments, setComments] = useState(appointment.comments);
+  const [comments, setComments] = useState(appointment.comments || '');
   
+  console.log(appointment)
   useEffect(() => {
     fetch(`${baseUrl}/procedures`)
       .then(res => res.json())
@@ -30,14 +34,6 @@ function AppointmentModal({ setModal, action, choosenDate, date, appointmentId, 
       .then(res => res.json())
       .then(data => setClients(data));
   }, []);
-
-  useEffect(() => {
-    if (appointmentId) {
-      fetch(`${baseUrl}/appointments/${appointmentId}`)
-        .then(res => res.json())
-        .then(data => setAppointment(data));
-    }
-  }, [appointmentId]);
 
   const hourMask = input => {
     let value = input.target.value;
@@ -70,6 +66,7 @@ function AppointmentModal({ setModal, action, choosenDate, date, appointmentId, 
       });
 
       setModal(false);
+      dispatch(resetAppointment());
 
     } catch (error) {
       console.error(error);
@@ -82,7 +79,7 @@ function AppointmentModal({ setModal, action, choosenDate, date, appointmentId, 
 
         <header className="modal__header">
           <h1 className="modal__title">
-            {status === 'new'
+            {action === 'new'
               ? 'Agendar para'
               : 'Editar agendamento para'
             }
@@ -165,13 +162,13 @@ function AppointmentModal({ setModal, action, choosenDate, date, appointmentId, 
         </main>
 
         <footer className="modal__footer">
-          {status === 'new'
-            ? <Button text={'Agendar'}  handleClick={handleSubmit}/>
-            : <Button text={'Salvar'}/>
+          {action === 'new'
+            ? <Button type={'primary'} text={'Agendar'}  handleClick={handleSubmit}/>
+            : <Button type={'primary'} text={'Salvar'}/>
           }
-          <Button text={'Cancelar'} className="button__cancel" handleClick={handleCancel}/>
+          <Button type={'secondary'} text={'Cancelar'} className="button__cancel" handleClick={handleCancel}/>
         </footer>
-        
+
       </div>
     </div>
   );

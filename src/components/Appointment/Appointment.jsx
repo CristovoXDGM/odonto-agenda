@@ -1,9 +1,14 @@
 import React from 'react';
 import { addMinutes, format, parseISO } from 'date-fns';
+import { useDispatch } from 'react-redux';
+import { baseUrl } from '../../services/api';
+import { setAppointment } from '../../actions/appointment';
 
 import './styles.css';
 
-const Hour = ({ appointment }) => {
+const Appointment = ({ appointment, setModal }) => {
+  const dispatch = useDispatch();
+
   const startHour = parseISO(appointment.date);
   const finishHour = addMinutes(parseISO(appointment.date), appointment.duration);
 
@@ -32,8 +37,19 @@ const Hour = ({ appointment }) => {
     }
   }
 
+  const handleClick = async () => {
+    const results = await fetch(`${baseUrl}/appointments/${appointment.id}`);
+    const data = await results.json();
+    dispatch(setAppointment(data));
+    setModal(true);
+    // console.log(data)
+  }
+
   return (
-    <div className="schedule-wrapper">
+    <div 
+      className="schedule-wrapper"
+      onClick={handleClick}
+    >
       {appointment && 
       <div 
         className="schedule" 
@@ -61,4 +77,4 @@ const Hour = ({ appointment }) => {
   );
 }
 
-export default Hour;
+export default Appointment;

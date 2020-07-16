@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import Calendar from 'react-calendar';
+import { useDispatch } from 'react-redux';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
+
 import { baseUrl } from '../../services/api';
+import { setAppointments } from '../../actions/appointments';
+import { resetAppointment } from '../../actions/appointment';
 
 import 'react-calendar/dist/Calendar.css';
 import './styles.css';
@@ -12,16 +16,18 @@ import Button from '../../components/Button';
 import AppointmentModal from '../../components/AppointmentModal';
 
 const Dashboard = () => {
+  const dispatch = useDispatch();
+
   const [activeModal, setActiveModal] = useState(false);
   const [date, setDate] = useState(new Date());
-  const [appointments, setAppointments] = useState([]);
+
   const choosenDay = format(date, 'yyyy-MM-dd');
 
   useEffect(() => {
     fetch(`${baseUrl}/appointments?schedule=${choosenDay}`)
       .then(res => res.json())
       .then(data => {
-        setAppointments(data);
+        dispatch(setAppointments(data));
       });
   }, [choosenDay, activeModal]);
 
@@ -38,6 +44,7 @@ const Dashboard = () => {
   const handleClickCancel = e => {
     e.preventDefault();
 
+    dispatch(resetAppointment());
     setActiveModal(false);
   }
 
@@ -65,11 +72,11 @@ const Dashboard = () => {
           </h2>
           
           <div className="add-appointment">
-            <Button text={'Novo'} icon={'add'} handleClick={handleClickNew} />
+            <Button type={'primary'} text={'Novo'} icon={'add'} handleClick={handleClickNew} />
           </div>
         </div>
 
-        <ScheduleList appointments={appointments}/>
+        <ScheduleList setModal={setActiveModal}/>
         
         {activeModal &&
           <AppointmentModal 
