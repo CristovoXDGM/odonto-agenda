@@ -3,26 +3,28 @@ import { useSelector, useDispatch } from 'react-redux';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { baseUrl } from '../../services/api';
+
 import { resetAppointment } from '../../actions/appointment';
+import { setActive } from '../../actions/modal';
 
 import './styles.css';
 
 import Button from '../Button';
 
-function AppointmentModal({ setModal, action, choosenDate, date, handleCancel }) {
+function AppointmentModal({ choosenDate, date }) {
   const dispatch = useDispatch();
-  const appointment = useSelector(state => state.appointment);
+  const { id, procedure_id, client_id, hour, duration, comments } = useSelector(state => state.appointment);
+  const { modalType } = useSelector(state => state.modal);
 
   const [procedures, setProcedures] = useState([]);
   const [clients, setClients] = useState([]);
 
-  const [procedureId, setProcedureId] = useState(appointment.procedure_id || 1);
-  const [clientId, setClientId] = useState(appointment.client_id || 1);
-  const [hour, setHour] = useState(appointment.hour || '');
-  const [duration, setDuration] = useState(appointment.duration || '');
-  const [comments, setComments] = useState(appointment.comments || '');
+  const [procedureId, setProcedureId] = useState(procedure_id || 1);
+  const [clientId, setClientId] = useState(client_id || 1);
+  const [formHour, setFormHour] = useState(hour || '');
+  const [formDuration, setFormDuration] = useState(duration || '');
+  const [formComments, setFormComments] = useState(comments || '');
   
-  console.log(appointment)
   useEffect(() => {
     fetch(`${baseUrl}/procedures`)
       .then(res => res.json())
@@ -38,35 +40,68 @@ function AppointmentModal({ setModal, action, choosenDate, date, handleCancel })
   const hourMask = input => {
     let value = input.target.value;
 
-    setHour(value
+    setFormHour(value
       .replace(/\D/g, '')
       .replace(/(\d{2})/, '$1:')
     )
   }
 
-  const handleSubmit = async e => {
+  const handleClickCancel = e => {
     e.preventDefault();
+
+    dispatch(resetAppointment());
+    dispatch(setActive(false));
+  }
+
+  const handleSubmit = async (e, method, id) => {
+    e.preventDefault();
+    
+    let fetchUrl = `${baseUrl}/appointments`;
+    
+    if (id) {
+      fetchUrl = `${fetchUrl}/${id}`;
+    }
 
     const postObject = JSON.stringify({
       procedure_id: Number(procedureId),
       client_id: Number(clientId),
       choosenDate,
-      hour,
-      duration,
-      comments
+      hour: formHour,
+      duration: formDuration,
+      comments: formComments
     });
 
     try {
-      await fetch(`${baseUrl}/appointments`, {
-        method: 'POST',
+      await fetch(fetchUrl, {
+        method,
         headers: {
           'Content-Type': 'application/json'
         },
         body: postObject,
       });
 
-      setModal(false);
+      dispatch(setActive(false));
       dispatch(resetAppointment());
+
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  const handleDelete = async (e, id) => {
+    e.preventDefault();
+
+    try {
+      const canDelete = window.confirm('Tem certeza que deseja excluir essa consulta?');
+
+      if(canDelete) {
+        await fetch(`${baseUrl}/appointments/${id}`, {
+          method: 'DELETE'
+        });
+
+        dispatch(setActive(false));
+        dispatch(resetAppointment());
+      }
 
     } catch (error) {
       console.error(error);
@@ -79,7 +114,7 @@ function AppointmentModal({ setModal, action, choosenDate, date, handleCancel })
 
         <header className="modal__header">
           <h1 className="modal__title">
-            {action === 'new'
+            {modalType === 'new'
               ? 'Agendar para'
               : 'Editar agendamento para'
             }
@@ -120,9 +155,9 @@ function AppointmentModal({ setModal, action, choosenDate, date, handleCancel })
               <div className="field__input">
                 <input
                   type="text"
-                  name="hour"
+                  name="formHour"
                   maxLength="5"
-                  value={hour}
+                  value={formHour}
                   onChange={e => hourMask(e)}
                   className="modal__input"
                 />
@@ -137,8 +172,8 @@ function AppointmentModal({ setModal, action, choosenDate, date, handleCancel })
                   type="text"
                   name="duration"
                   maxLength="3"
-                  value={duration}
-                  onChange={e => setDuration(e.target.value)}
+                  value={formDuration}
+                  onChange={e => setFormDuration(e.target.value)}
                   className="modal__input"
                 />
                 <span className="input__units">min</span>
@@ -152,8 +187,8 @@ function AppointmentModal({ setModal, action, choosenDate, date, handleCancel })
             <textarea 
               name="comments" 
               className="modal__input modal__input--comments"
-              value={comments}
-              onChange={e => setComments(e.target.value)}
+              value={formComments}
+              onChange={e => setFormComments(e.target.value)}
             />
           </div>
 
@@ -162,11 +197,19 @@ function AppointmentModal({ setModal, action, choosenDate, date, handleCancel })
         </main>
 
         <footer className="modal__footer">
-          {action === 'new'
-            ? <Button type={'primary'} text={'Agendar'}  handleClick={handleSubmit}/>
-            : <Button type={'primary'} text={'Salvar'}/>
+          {modalType === 'new'
+            ? <div className="footer__new">
+                <Button type={'primary'} text={'Agendar'}  handleClick={e => handleSubmit(e, 'POST')}/>
+                <Button type={'cancel'} text={'Cancelar'} className="button__cancel" handleClick={handleClickCancel}/>
+              </div>
+            : <div className="footer__edit">
+                <Button type={'save'} text={'Salvar'} handleClick={e => handleSubmit(e, 'PUT', id)}/>
+                <div className="footer__edit footer__edit--bottom">
+                  <Button type={'cancel'} text={'Cancelar'} handleClick={handleClickCancel}/>
+                  <Button type={'delete'} text={'Excluir'} handleClick={e => handleDelete(e, id)}/>
+                </div>
+              </div>
           }
-          <Button type={'secondary'} text={'Cancelar'} className="button__cancel" handleClick={handleCancel}/>
         </footer>
 
       </div>

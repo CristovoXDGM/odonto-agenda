@@ -10,9 +10,21 @@ function Button({ type, text, icon, handleClick }) {
       backgroundColor: 'var(--button-color)',
       color: '#fff',
     },
-    secondary: {
+    save: {
+      backgroundColor: 'var(--button-color)',
+      color: '#fff',
+      width: '100%',
+      height: '2.5em'
+    },
+    cancel: {
       backgroundColor: 'var(--cancel-button)',
       color: '#fff',
+      display: 'inline-block',
+    },
+    delete: {
+      backgroundColor: 'var(--delete-button)',
+      color: '#fff',
+      display: 'inline-block',
     }
   }
 

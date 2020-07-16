@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import Calendar from 'react-calendar';
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 
 import { baseUrl } from '../../services/api';
 import { setAppointments } from '../../actions/appointments';
-import { resetAppointment } from '../../actions/appointment';
+import { setActive, setType } from '../../actions/modal';
 
 import 'react-calendar/dist/Calendar.css';
 import './styles.css';
@@ -17,8 +17,8 @@ import AppointmentModal from '../../components/AppointmentModal';
 
 const Dashboard = () => {
   const dispatch = useDispatch();
+  const { modalActive } = useSelector(state => state.modal);
 
-  const [activeModal, setActiveModal] = useState(false);
   const [date, setDate] = useState(new Date());
 
   const choosenDay = format(date, 'yyyy-MM-dd');
@@ -29,7 +29,7 @@ const Dashboard = () => {
       .then(data => {
         dispatch(setAppointments(data));
       });
-  }, [choosenDay, activeModal]);
+  }, [choosenDay, dispatch, modalActive]);
 
   const handleChangeDate = event => {
     setDate(event);
@@ -38,14 +38,8 @@ const Dashboard = () => {
   const handleClickNew = e => {
     e.preventDefault();
 
-    setActiveModal(true);
-  }
-
-  const handleClickCancel = e => {
-    e.preventDefault();
-
-    dispatch(resetAppointment());
-    setActiveModal(false);
+    dispatch(setActive(true));
+    dispatch(setType('new'));
   }
 
   return (
@@ -76,15 +70,12 @@ const Dashboard = () => {
           </div>
         </div>
 
-        <ScheduleList setModal={setActiveModal}/>
+        <ScheduleList />
         
-        {activeModal &&
+        {modalActive &&
           <AppointmentModal 
-            setModal={setActiveModal}
-            action={'new'} 
             choosenDate={choosenDay} 
             date={date} 
-            handleCancel={handleClickCancel} 
           />
         }
       </div>

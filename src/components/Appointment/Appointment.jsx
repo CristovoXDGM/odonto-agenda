@@ -2,11 +2,13 @@ import React from 'react';
 import { addMinutes, format, parseISO } from 'date-fns';
 import { useDispatch } from 'react-redux';
 import { baseUrl } from '../../services/api';
+
 import { setAppointment } from '../../actions/appointment';
+import { setActive, setType } from '../../actions/modal';
 
 import './styles.css';
 
-const Appointment = ({ appointment, setModal }) => {
+const Appointment = ({ appointment }) => {
   const dispatch = useDispatch();
 
   const startHour = parseISO(appointment.date);
@@ -40,9 +42,10 @@ const Appointment = ({ appointment, setModal }) => {
   const handleClick = async () => {
     const results = await fetch(`${baseUrl}/appointments/${appointment.id}`);
     const data = await results.json();
+    
     dispatch(setAppointment(data));
-    setModal(true);
-    // console.log(data)
+    dispatch(setActive(true));
+    dispatch(setType('edit'));
   }
 
   return (
