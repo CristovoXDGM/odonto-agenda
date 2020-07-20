@@ -1,17 +1,17 @@
 import React from 'react';
-import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
+import { Switch, Route, Redirect } from 'react-router-dom';
 
 import Dashboard from '../pages/Dashboard';
+import Clients from '../pages/Clients';
 
 const Routes = () => {
   return (
-    <BrowserRouter>
-      <Switch>
-        <Redirect exact from="/" to="/dashboard" />
+    <Switch>
+      <Redirect exact from="/" to="/dashboard" />
 
-        <Route path="/dashboard" component={Dashboard} />
-      </Switch>
-    </BrowserRouter>
+      <Route path="/dashboard" component={Dashboard} />
+      <Route path="/clients" component={Clients} />
+    </Switch>
   );
 }
 

@@ -43,7 +43,7 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="dashboard">
+    <div className="dashboard container">
       <section className="calendar">
         <Calendar 
           value={date}

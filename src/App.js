@@ -1,4 +1,5 @@
 import React from 'react';
+import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 
 import './App.css';
@@ -11,10 +12,12 @@ import store from './store';
 function App() {
   return (
     <Provider store={store}>
-      <div className="App">
-        <Topbar />
-        <Routes />
-      </div>
+      <BrowserRouter>
+        <div className="App">
+          <Topbar />
+          <Routes />
+        </div>
+      </BrowserRouter>
     </Provider>
   );
 }

@@ -1,0 +1,18 @@
+.client {
+  background-color: var(--bg-darker);
+  width: 90%;
+  padding: 0.7em;
+  margin: 0.5em auto;
+  /* margin-bottom: 0.5em; */
+
+  box-shadow: 0px 2px 4px -3px rgba(0, 0, 0, 0.8);
+}
+
+.client:hover,
+.client:active {
+  background-color: var(--hover);
+}
+
+.client__name {
+  text-align: center;
+}

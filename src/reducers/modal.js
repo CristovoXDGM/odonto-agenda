@@ -1,4 +1,3 @@
-
 const modalInicialState = {
   modalActive: false,
   modalType: 'new',
