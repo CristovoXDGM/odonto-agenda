@@ -19,11 +19,11 @@ function AppointmentModal({ choosenDate, date }) {
   const [procedures, setProcedures] = useState([]);
   const [clients, setClients] = useState([]);
 
-  const [procedureId, setProcedureId] = useState(procedure_id || 1);
+  const [procedureId, setProcedureId] = useState(procedure_id);
   const [clientId, setClientId] = useState(client_id || 1);
-  const [formHour, setFormHour] = useState(hour || '');
-  const [formDuration, setFormDuration] = useState(duration || '');
-  const [formComments, setFormComments] = useState(comments || '');
+  const [formHour, setFormHour] = useState(hour);
+  const [formDuration, setFormDuration] = useState(duration);
+  const [formComments, setFormComments] = useState(comments);
   
   useEffect(() => {
     fetch(`${baseUrl}/procedures`)
@@ -39,11 +39,21 @@ function AppointmentModal({ choosenDate, date }) {
 
   const hourMask = input => {
     let value = input.target.value;
+    
+    if(formHour.length === 1) {
+      setFormHour(`${value}:`)
+    } else {
+      setFormHour(value);
+    }
 
-    setFormHour(value
-      .replace(/\D/g, '')
-      .replace(/(\d{2})/, '$1:')
-    )
+    if (formHour === ':') {
+      setFormHour('');
+    }
+
+    // setFormHour(value
+    //   .replace(/\D/g, '')
+    //   .replace(/(\d{2})/, '$1:')
+    // )
   }
 
   const handleClickCancel = e => {
@@ -53,8 +63,21 @@ function AppointmentModal({ choosenDate, date }) {
     dispatch(setActive(false));
   }
 
+  const validate = hour => {
+    if (
+      hour.length < 5 ||
+      hour[0] > 2 ||
+      hour[1] > 3 ||
+      hour[3] > 5
+      ) {
+        return alert('Digite um horario válido');
+    }
+  }
+
   const handleSubmit = async (e, method, id) => {
     e.preventDefault();
+
+    validate(formHour);
     
     let fetchUrl = `${baseUrl}/appointments`;
     
