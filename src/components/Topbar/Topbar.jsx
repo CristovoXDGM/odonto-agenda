@@ -6,8 +6,16 @@ import './styles.css';
 function Topbar() {
   return (
     <header className="topbar">
-      <Link to="/dashboard">Home</Link>
-      <Link to="/clients">Pacientes</Link>
+      <nav className="topbar__nav">
+        <ul className="topbar__links">
+          <li>
+            <Link to="/dashboard" className="topbar__link">Home</Link>
+          </li>
+          <li>
+            <Link to="/clients" className="topbar__link">Pacientes</Link>
+          </li>
+        </ul>
+      </nav>
     </header>
   );
 }
