@@ -13,6 +13,7 @@ import './styles.css';
 
 import ScheduleList from '../../components/ScheduleList';
 import Button from '../../components/Button';
+import Modal from '../../components/Modal';
 import AppointmentModal from '../../components/AppointmentModal';
 
 const Dashboard = () => {
@@ -73,10 +74,12 @@ const Dashboard = () => {
         <ScheduleList />
         
         {modalActive &&
-          <AppointmentModal 
-            choosenDate={choosenDay} 
-            date={date} 
-          />
+          <Modal>
+            <AppointmentModal 
+              choosenDate={choosenDay} 
+              date={date} 
+            />
+          </Modal>
         }
       </div>
     </div>

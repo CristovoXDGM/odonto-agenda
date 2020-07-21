@@ -1,10 +1,29 @@
 .client-list {
-  background-color: #fff;
+  display: flex;
+  flex-direction: column;
   width: 100%;
-  height: 100%;
+}
 
+.client-list__header {
+  display: flex;
+  justify-content: flex-end;
+
+  height: 1.8em;
+}
+
+.client-list__content {
+  background-color: #fff;
+  height: 70vh;
+  margin-top: 0.5em;
+  
   border-radius: 8px;
   box-shadow: 0px 2px 14px -4px rgba(0, 0, 0, 0.3);
 
   overflow-y: auto;
+}
+
+@media (min-width: 1000px) {
+  .client-list__header {
+    height: 2.2em;
+  }
 }

@@ -1,17 +1,17 @@
 .search {
-  width: 100%;
+  width: 90%;
   padding: 1em 0;
 }
 
 .search__field {
-  width: 90%;
+  width: 100%;
   margin: auto;
 }
 
 .search__input {
   width: 100%;
-  padding: 0.4em 0.9em;
-  font-size: 1.1rem;
+  padding: 0.4em 0.8em;
+  font-size: 1.05rem;
   border: none;
   border-radius: 8px;
   box-shadow: 0px 3px 6px 0px rgba(0, 0, 0, 0.7);

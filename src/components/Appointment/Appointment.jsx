@@ -42,7 +42,7 @@ const Appointment = ({ appointment }) => {
   const handleClick = async () => {
     const results = await fetch(`${baseUrl}/appointments/${appointment.id}`);
     const data = await results.json();
-    
+
     dispatch(setAppointment(data));
     dispatch(setActive(true));
     dispatch(setType('edit'));
