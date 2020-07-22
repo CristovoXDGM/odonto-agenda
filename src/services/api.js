@@ -1,5 +1,5 @@
 const api = {
-  baseUrl: 'http://localhost:3333',
+  baseUrl: 'https://odontoagenda-api.herokuapp.com/',
 }
 
 module.exports = api;
