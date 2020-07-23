@@ -4,6 +4,7 @@ import { setActive, setType } from '../../actions/modal';
 
 import'./styles.css';
 
+import Loading from '../Loading';
 import Client from '../Client';
 import Button from '../Button';
 import Modal from '../Modal';
@@ -32,12 +33,10 @@ function ClientList() {
       </header>
 
       <main className="client-list__content">
-        {clientsList
-          ? clientsList.map(client => (
-              <Client key={client.id} client={client} />
-            ))
-          : 'Carregando...'
-        }
+        {clientsList &&
+          clientsList.map(client => (
+            <Client key={client.id} client={client} />
+          ))}
       </main>
 
       {modalActive && 

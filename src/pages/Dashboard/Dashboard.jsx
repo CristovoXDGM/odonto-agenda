@@ -12,6 +12,7 @@ import 'react-calendar/dist/Calendar.css';
 import './styles.css';
 
 import ScheduleList from '../../components/ScheduleList';
+import Loading from '../../components/Loading';
 import Button from '../../components/Button';
 import Modal from '../../components/Modal';
 import AppointmentModal from '../../components/AppointmentModal';
@@ -21,15 +22,20 @@ const Dashboard = () => {
   const { modalActive } = useSelector(state => state.modal);
 
   const [date, setDate] = useState(new Date());
+  const [loading, setLoading] = useState(false);
 
   const choosenDay = format(date, 'yyyy-MM-dd');
 
   useEffect(() => {
+    setLoading(true);
+
     fetch(`${baseUrl}/appointments?schedule=${choosenDay}`)
       .then(res => res.json())
       .then(data => {
-        dispatch(setAppointments(data));
+        dispatch(setAppointments(data))
       });
+
+      setLoading(false);
   }, [choosenDay, dispatch, modalActive]);
 
   const handleChangeDate = event => {
@@ -71,7 +77,10 @@ const Dashboard = () => {
           </div>
         </div>
 
-        <ScheduleList />
+        {loading
+          ? <Loading />
+          : <ScheduleList />
+        }
         
         {modalActive &&
           <Modal>
