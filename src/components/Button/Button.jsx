@@ -7,11 +7,11 @@ function Button({ type, text, icon, handleClick }) {
 
   const styles = {
     primary: {
-      backgroundColor: 'var(--button-color)',
+      backgroundColor: 'var(--primary-color)',
       color: '#fff',
     },
     save: {
-      backgroundColor: 'var(--button-color)',
+      backgroundColor: 'var(--primary-color)',
       color: '#fff',
       width: '100%',
       height: '2.5em'

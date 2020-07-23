@@ -32,12 +32,10 @@ function ClientList() {
       </header>
 
       <main className="client-list__content">
-        {clientsList
-          ? clientsList.map(client => (
-              <Client key={client.id} client={client} />
-            ))
-          : 'Carregando...'
-        }
+        {clientsList &&
+          clientsList.map(client => (
+            <Client key={client.id} client={client} />
+          ))}
       </main>
 
       {modalActive && 
