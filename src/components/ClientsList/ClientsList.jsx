@@ -4,7 +4,6 @@ import { setActive, setType } from '../../actions/modal';
 
 import'./styles.css';
 
-import Loading from '../Loading';
 import Client from '../Client';
 import Button from '../Button';
 import Modal from '../Modal';
