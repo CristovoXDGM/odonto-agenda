@@ -23,9 +23,9 @@ function Clients() {
       .then(res => res.json())
       .then(data => {
         dispatch(setClients(data));
+        setLoading(false);
       });
 
-      setLoading(false);
   }, [dispatch, modalActive]);
 
   return (

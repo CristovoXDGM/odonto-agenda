@@ -27,14 +27,14 @@
 }
 
 .topbar__link:hover {
-  color: var(--button-color);
+  color: var(--primary-color);
 }
 
 .topbar__link::after {
   position: absolute;
   bottom: 0;
   left: 0;
-  background-color: var(--button-color);
+  background-color: var(--primary-color);
   content: '';
   height: 2px;
 

@@ -32,10 +32,10 @@ const Dashboard = () => {
     fetch(`${baseUrl}/appointments?schedule=${choosenDay}`)
       .then(res => res.json())
       .then(data => {
-        dispatch(setAppointments(data))
-      });
-
-      setLoading(false);
+        dispatch(setAppointments(data)); 
+        setLoading(false);
+      })
+      
   }, [choosenDay, dispatch, modalActive]);
 
   const handleChangeDate = event => {
