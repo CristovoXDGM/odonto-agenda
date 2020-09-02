@@ -36,12 +36,12 @@ const appointmentReducer = (state = appointmentInicialState, action) => {
         hour,
         duration: payload.duration,
         comments: payload.comments,
-      }
+      };
     }
-  
+
     default:
       return state;
   }
-}
+};
 
 export default appointmentReducer;

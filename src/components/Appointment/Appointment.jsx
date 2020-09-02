@@ -12,7 +12,7 @@ const Appointment = ({ appointment }) => {
   const dispatch = useDispatch();
 
   const startHour = parseISO(appointment.date);
-  const finishHour = addMinutes(parseISO(appointment.date), appointment.duration);
+  const finishHour = addMinutes(startHour, appointment.duration);
 
   const formatHour = date => {
     return format(date, 'HH:mm');
